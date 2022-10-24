@@ -2,7 +2,7 @@
 
 This project focuses on implementing a Shiny dashboard visualising the US school shooting incident since the 1999 Columbine Massacre.
 
-- `shinyapps.io` link: <https://greysonchung.shinyapps.io/InformationVisualisation/>
+- `shinyapps.io` link: [Here](https://greysonchung.shinyapps.io/InformationVisualisation/)
 
 ## How to run?
 
