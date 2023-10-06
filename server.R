@@ -169,30 +169,28 @@ server <- shinyServer(function(input, output) {
   output$weapon_source <- renderHighchart({
     dataset %>%
       
-      # Filter empty rows
-      mutate_all(na_if,"") %>%
-      filter(!is.na(age_shooter1)) %>%
+      # Filter out rows that aren't relevant to the analysis
+      filter(!is.na(age_shooter1), between(age_shooter1, 10, 19), !is.na(source_of_weapon)) %>%
       
-      # Obtain shooters between age 10 and 19
-      filter(between(age_shooter1, 10, 19)) %>%
-      # Filter rows with non-specified weapon source
-      filter(!is.na(source_of_weapon)) %>%
-      
-      # Count and sort, and calculate percentage for each categories
-      count(source_of_weapon) %>% arrange(n) %>%
+      # Count, sort, and calculate percentage for each category
+      count(source_of_weapon) %>%
+      arrange(n) %>%
       mutate(freq = round(n/sum(n), 3)) %>%
+      
+      # Render the chart
       hchart("pie", innerSize = '60%', hcaes(x = source_of_weapon, y = freq*100),
-             showInLegend = TRUE, dataLabels = list(enabled = TRUE), allowPointSelect = TRUE) %>%
+             showInLegend = TRUE, 
+             dataLabels = list(enabled = TRUE),
+             allowPointSelect = TRUE) %>%
       hc_title(text = "Source of Weapon for Age 10-19 Shooters") %>%
-      hc_subtitle(text = 'Source: <a href="https://github.com/washingtonpost/data-
-                  school-shootings" target="_blank">The Washington Post</a><br/>
-                  Omitted 127 records with unspecified weapon source') %>% 
-      # Define hover tooltips
+      hc_subtitle(text = 'Source: <a href="https://github.com/washingtonpost/data-school-shootings" target="_blank">The Washington Post</a><br/>
+                Omitted 127 records with unspecified weapon source') %>% 
       hc_tooltip(pointFormat = 'Weapon Source: <b>{point.source_of_weapon}</b><br/>
-                 Accounted for <b>{point.y}%</b> of all specified weapon source') %>%
+               Accounted for <b>{point.y}%</b> of all specified weapon source') %>%
       hc_exporting(enabled = TRUE) %>%
       hc_legend(labelFormat = '{name} <span style="opacity: 0.5">{n}</span>')
   })
+
   
   output$shooter_intention <- renderHighchart({
     # Prepare data

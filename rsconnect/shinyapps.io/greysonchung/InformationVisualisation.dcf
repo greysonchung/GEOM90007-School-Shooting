@@ -1,0 +1,12 @@
+name: InformationVisualisation
+title: InformationVisualisation
+username: greysonchung
+account: greysonchung
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 7112482
+bundleId: 7770214
+url: https://greysonchung.shinyapps.io/InformationVisualisation/
+version: 1
+asMultiple: FALSE
+asStatic: FALSE
