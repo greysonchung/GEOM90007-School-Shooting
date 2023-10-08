@@ -10,7 +10,7 @@ usa <- jsonlite::fromJSON("data/us-all.geo.json", simplifyVector = FALSE)
 # Theme for dashboard
 customTheme <- shinyDashboardThemeDIY(
   ### general
-  appFontFamily = "Calibri"
+  appFontFamily = "Courier New"
   ,appFontColor = "#2D2D2D"
   ,primaryFontColor = "#000000"
   ,infoFontColor = "#000000"

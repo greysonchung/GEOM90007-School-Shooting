@@ -5,7 +5,7 @@ account: greysonchung
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 7112482
-bundleId: 7770214
+bundleId: 7778212
 url: https://greysonchung.shinyapps.io/InformationVisualisation/
 version: 1
 asMultiple: FALSE

@@ -103,12 +103,11 @@ body <- dashboardBody(
               # Define highcharter output
               highchartOutput("year_casualty", height = 485),
               hr(),
-              h4("School shooting have been happening every year since the 1999 Columbine massacre. 
-                 And the number of casualties has top the chart in 2018 with a horrifying record of 
-                 95 casualties. The number of incidents and casualties has significantly reduced in 
-                 2020, which might be primarily due to school closures during the pandemic. However,
-                 the number of incidents skyrocketed in 2021, with a chart-topping 42 shooting 
-                 incidents happening last year.",
+              h4("School shootings have been occurring every year since the 1999 Columbine massacre. The 
+                 number of casualties peaked in 2018 with a horrifying record of 95 casualties. The number 
+                 of incidents and casualties significantly reduced in 2020, which might be primarily due to 
+                 school closures during the pandemic. However, the number of incidents skyrocketed in 2021, 
+                 with a record-breaking 42 shooting incidents occurring that year.",
                  style = "color: #808080;font-size:15px;"),
               hr(),
               h5('Data Source: ', 
@@ -132,14 +131,13 @@ body <- dashboardBody(
                 column(6, highchartOutput("weapon_source"))
               ),
               hr(),
-              h4("As the plot above on the left depicted, over 55% of shooters with known 
-                 age are between the age of 15 and 19, followed by those aged between 10 to 
-                 14 with almost 20%, while the plot on the right shows that for those aged 
-                 between 10 and 19, over 70% of their known weapon source were from relatives. 
-                 Thus, adult should pay more attention and reduce minor's access to firearms.
-                 On the other hand, the plot below shows that over 55% of shooting incidents 
-                 were targeted, however, indiscriminate firing leads to the highest number of 
-                 casualties, which is even higher than the rest combined.",
+              h4("As depicted in the plot on the left, over 55% of shooters with a known age fall 
+                 between 15 and 19 years old, followed by those aged 10 to 14, who constitute almost
+                 20%. The plot on the right indicates that for those aged between 10 and 19, over 
+                 70% obtained their weapons from relatives. Thus, adults should be more vigilant and 
+                 limit minors' access to firearms. Conversely, the plot below reveals that over 55% 
+                 of shooting incidents were targeted. However, indiscriminate firing results in the 
+                 highest number of casualties, surpassing the combined total of other categories.",
                  style = "color: #808080;font-size:15px;"),
               hr(),
               fluidRow(
@@ -164,12 +162,12 @@ body <- dashboardBody(
                 column(7, highchartOutput("school_type"))
               ),
               hr(),
-              h4("As the pie chart on the left depicted, near 94% of the shooting incidents
-                 were occurred in public school. However, we do need to consider the difference
-                 that there are more public school than private school. Whilst the bar chart on
-                 the right shows that over 60% of the incidents were happened in high school,
-                 followed by elementary school with 14.5%. Nevertheless, local government and 
-                 school should take more effective actions to reduce the risk of school shootings.", 
+              h4("As depicted in the pie chart on the left, nearly 94% of the shooting incidents 
+                 occurred in public schools. However, we must consider the fact that there are more 
+                 public schools than private schools. The bar chart on the right shows that over 60% 
+                 of the incidents happened in high schools, followed by elementary schools with 14.5%. 
+                 Nevertheless, local governments and schools should take more effective actions to 
+                 reduce the risk of school shootings.", 
                  style = "color: #808080;font-size:15px;"),
               hr(),
               h5('Data Source: ', 

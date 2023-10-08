@@ -204,7 +204,7 @@ server <- shinyServer(function(input, output) {
       # Group shooting intention and summarise casualties for each intention
       group_by(shooting_type) %>%
       summarise(casual = sum(casualties), n = n()) %>%
-      mutate(freq = round(n/sum(n), 3)*100) %>%
+      mutate(freq = round(n/sum(n) * 100, 2)) %>%
       arrange(n)
     
     # Define color code
