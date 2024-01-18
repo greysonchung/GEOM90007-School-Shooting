@@ -18,40 +18,6 @@ options(highcharter.theme = hc_theme_hcrt())
 
 server <- shinyServer(function(input, output) {
   
-  ############################## Value Box Outputs ##############################
-  
-  # Value box for incident count
-  output$incident_1 <- renderValueBox({
-    valueBox(
-      value = dim(dataset)[1], subtitle = "Incidents to Date",
-      icon = fa_i("fas fa-hashtag"), color = "blue"
-    )
-  })
-  
-  # Value box for student endangered count
-  output$student_1 <- renderValueBox({
-    valueBox(
-      value = sum(dataset$enrollment), subtitle = "Students Endangered",
-      icon = fa_i("fas fa-person"), color = "orange"
-    )
-  })
-  
-  # Value box for fatality count
-  output$kill_1 <- renderValueBox({
-    valueBox(
-      value = sum(dataset$killed), subtitle = "Fatalities",
-      icon = fa_i("fas fa-truck-medical"), color = "red"
-    )
-  })
-  
-  # Value box for injury count
-  output$injury_1 <- renderValueBox({
-    valueBox(
-      value = sum(dataset$injured), subtitle = "Injuries",
-      icon = fa_i("fas fa-user-injured"), color = "teal"
-    )
-  })
-  
   ##################################### Home #####################################
   
   output$school_map <- renderHighchart({
