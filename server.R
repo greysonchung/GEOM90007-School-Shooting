@@ -170,7 +170,8 @@ server <- shinyServer(function(input, output) {
     dataset %>%
       
       # Filter out rows that aren't relevant to the analysis
-      filter(!is.na(age_shooter1), between(age_shooter1, 10, 19), !is.na(source_of_weapon)) %>%
+      filter(!is.na(age_shooter1), between(age_shooter1, 10, 19), 
+             !is.na(source_of_weapon), source_of_weapon != "") %>%
       
       # Count, sort, and calculate percentage for each category
       count(source_of_weapon) %>%

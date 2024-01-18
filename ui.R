@@ -1,104 +1,95 @@
-# UI
-# You can run the application by clicking 'Run App' above.
-# But PLEASE follow the instructions given in README.md
-# And install all the required packages via "Package Install Commands.Rmd"
-
 # Importing libraries
 library(shiny)
 library(shinythemes)
 library(fontawesome)
 library(shinyWidgets)
-library(shinydashboard)
 library(igraph)
 library(highcharter)
-library(dashboardthemes)
+library(bslib)
 source('helper.R')
 
-header <- dashboardHeader(
-  # Define the header and insert image as title
-  title = tags$a(tags$img(src='https://bit.ly/3cSvLu7',
-                          height='40', width='160')),
-  titleWidth = 280
-)
-
-sidebar <- dashboardSidebar(
-  width = 280,
-  sidebarMenu(
-    # Tab for different visualisation
-    menuItem("Home",
-             tabName = "home",
-             selected = T,
-             icon = fa_i('fas fa-house')),
-    menuItem("An Alarming Timeline",
-             tabName = "timeline",
-             icon = fa_i("fas fa-timeline")),
-    menuItem("Shooter And Intention",
-             tabName = "shooter",
-             icon = fa_i("fas fa-handcuffs")),
-    menuItem("School",
-             tabName = "school",
-             icon = fa_i("fas fa-school"))
-  )
-)
-
-body <- dashboardBody(
-  customTheme,
-  tabItems(
-    # Structure for home tab
-    tabItem("home",
+ui <- page_navbar(
+  title = "Post-Columbine: US School Shootings",
+  nav_spacer(),
+  nav_panel("Home",
             fluidPage(
               # Title for home tab
-              titlePanel(strong("Overview of US School Shooting Incidents 
-                 Since the 99 Columbine High Massacre")),
+              titlePanel("Overview of US School Shooting Incidents 
+                 Since the 99 Columbine High Massacre"),
               hr(),
-              h5(strong("The Sad Statistics Since the Columbine Massacre"),
+              h5(strong("Critical Figures: Key Statistics in the Wake of the Columbine Tragedy"),
                  style = "font-size:16px;"),
               
               # Value box
-              fluidRow(
-                column(3, valueBoxOutput("incident_1", width = 14)),
-                column(3, valueBoxOutput("student_1", width = 14)),
-                column(3, valueBoxOutput("kill_1", width = 14)),
-                column(3, valueBoxOutput("injury_1", width = 14))
-              )
-            ),
-            hr(),
-          
-            # Adapt sidebar layout for the map visualization
-            sidebarLayout(
-              sidebarPanel(
-                # Define filter and options for the user
-                pickerInput("map_state", 
-                            tags$p(fa("filter", fill = "forestgreen"), 
-                                   "State filter for visualisation"),
-                            state_choiceVec, selected = state_choiceVec, 
-                            multiple = TRUE, options = list(`actions-box` = TRUE)),
-                checkboxGroupInput("school_filter", 
-                                   tags$p(fa("filter", fill = "forestgreen"),
-                                          "School type filter"),
-                              school_type_choiceVec, selected = school_type_choiceVec),
-                sliderInput("map_filter", 
-                            tags$p(fa("filter", fill = "forestgreen"),
-                                   "Select a time period for visualisation"),
-                            min = 1999, max = 2022, value = c(1999, 2022), sep = "")
+              layout_columns(
+                value_box(
+                  title = "Total Incident Count",
+                  value = dim(dataset)[1],
+                  theme = "bg-gradient-purple-cyan",
+                  showcase = bsicons::bs_icon("hash"),
+                  showcase_layout = "top right"
+                ),
+                value_box(
+                  title = "Students Endangered",
+                  value = sum(dataset$enrollment),
+                  theme = "bg-gradient-orange-indigo",
+                  showcase = bsicons::bs_icon("people"),
+                  showcase_layout = "top right"
+                ),
+                value_box(
+                  title = "Fatalities",
+                  value = sum(dataset$killed),
+                  theme = "bg-gradient-red-indigo",
+                  showcase = bsicons::bs_icon("hospital"),
+                  showcase_layout = "top right"
+                ),
+                value_box(
+                  title = "Injuries",
+                  value = sum(dataset$injured),
+                  theme = "bg-gradient-teal-indigo",
+                  showcase = bsicons::bs_icon("bandaid"),
+                  showcase_layout = "top right"
+                )
               ),
-              mainPanel(
-                highchartOutput("school_map", height = 505)
-              )
-            ),
-            hr(),
-            h5('Data Source: ', 
-               a("The Washington Post", 
-                 href="https://github.com/washingtonpost/data-school-shootings")),
-            h5('Charts and map are created using ', 
-               a("Highcharter", 
-               href="https://jkunst.com/highcharter/"), 
-               '(a R wrapper for Highcharts)')
-    ),
-    
-    tabItem("timeline",
+              hr(),
+              
+              # Adapt sidebar layout for the map visualization
+              sidebarLayout(
+                sidebarPanel(
+                  # Define filter and options for the user
+                  pickerInput("map_state", 
+                              tags$p(fa("filter", fill = "forestgreen"), 
+                                     "State filter for visualisation"),
+                              state_choiceVec, selected = state_choiceVec, 
+                              multiple = TRUE, options = list(`actions-box` = TRUE)),
+                  checkboxGroupInput("school_filter", 
+                                     tags$p(fa("filter", fill = "forestgreen"),
+                                            "School type filter"),
+                                     school_type_choiceVec, selected = school_type_choiceVec),
+                  sliderInput("map_filter", 
+                              tags$p(fa("filter", fill = "forestgreen"),
+                                     "Select a time period for visualisation"),
+                              min = 1999, max = 2022, value = c(1999, 2022), sep = "")
+                ),
+                mainPanel(
+                  highchartOutput("school_map", height = 580)
+                )
+              ),
+              hr(),
+              h5('Data Source: ', 
+                 a("The Washington Post", 
+                   href="https://github.com/washingtonpost/data-school-shootings"),
+                 style = "font-size:16px;"),
+              h5('Charts and map are created using ', 
+                 a("Highcharter", 
+                   href="https://jkunst.com/highcharter/"), 
+                 '(a R wrapper for Highcharts)',
+                 style = "font-size:16px;")
+            )
+  ),
+  nav_panel("Timeline",
             fluidPage(
-              titlePanel(strong("An Alarming Timeline")),
+              titlePanel("An Alarming Timeline"),
               hr(),
               # Define highcharter output
               highchartOutput("year_casualty", height = 485),
@@ -111,18 +102,19 @@ body <- dashboardBody(
                  style = "color: #808080;font-size:15px;"),
               hr(),
               h5('Data Source: ', 
-                 a("The Washington Post",
-                   href="https://github.com/washingtonpost/data-school-shootings")),
+                 a("The Washington Post", 
+                   href="https://github.com/washingtonpost/data-school-shootings"),
+                 style = "font-size:16px;"),
               h5('Charts and map are created using ', 
                  a("Highcharter", 
                    href="https://jkunst.com/highcharter/"), 
-                 '(a R wrapper for Highcharts)')
+                 '(a R wrapper for Highcharts)',
+                 style = "font-size:16px;")
             )
-    ),
-    
-    tabItem("shooter",
+  ),
+  nav_panel("Shooter and Intention",
             fluidPage(
-              titlePanel(strong("Shooter And Intention")),
+              titlePanel("Shooter And Intention"),
               hr(),
               
               # Use fluid row layout to put two plots side by side
@@ -145,17 +137,19 @@ body <- dashboardBody(
               ),
               hr(),
               h5('Data Source: ', 
-                 a("The Washington Post",
-                   href="https://github.com/washingtonpost/data-school-shootings")),
+                 a("The Washington Post", 
+                   href="https://github.com/washingtonpost/data-school-shootings"),
+                 style = "font-size:16px;"),
               h5('Charts and map are created using ', 
                  a("Highcharter", 
                    href="https://jkunst.com/highcharter/"), 
-                 '(a R wrapper for Highcharts)')
+                 '(a R wrapper for Highcharts)',
+                 style = "font-size:16px;")
             )
-    ),
-    tabItem("school",
+  ),
+  nav_panel("School",
             fluidPage(
-              titlePanel(strong("School")),
+              titlePanel("School"),
               hr(),
               fluidRow(
                 column(5, highchartOutput("public_private")),
@@ -171,21 +165,17 @@ body <- dashboardBody(
                  style = "color: #808080;font-size:15px;"),
               hr(),
               h5('Data Source: ', 
-                 a("The Washington Post",
-                   href="https://github.com/washingtonpost/data-school-shootings")),
+                 a("The Washington Post", 
+                   href="https://github.com/washingtonpost/data-school-shootings"),
+                 style = "font-size:16px;"),
               h5('Charts and map are created using ', 
                  a("Highcharter", 
                    href="https://jkunst.com/highcharter/"), 
-                 '(a R wrapper for Highcharts)')
+                 '(a R wrapper for Highcharts)',
+                 style = "font-size:16px;")
             )
-    )
+  ),
+  nav_item(
+    input_dark_mode(id = "dark_mode", mode = "light")
   )
-)
-
-# Putting the UI together
-ui <- dashboardPage(
-  title = "GEOM90007 Dashboard",
-  header, 
-  sidebar, 
-  body
 )
