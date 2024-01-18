@@ -69,7 +69,7 @@ ui <- page_navbar(
                   sliderInput("map_filter", 
                               tags$p(fa("filter", fill = "forestgreen"),
                                      "Select a time period for visualisation"),
-                              min = 1999, max = 2022, value = c(1999, 2022), sep = "")
+                              min = 1999, max = 2023, value = c(1999, 2023), sep = "")
                 ),
                 mainPanel(
                   highchartOutput("school_map", height = 580)
@@ -159,10 +159,14 @@ ui <- page_navbar(
               h4("As depicted in the pie chart on the left, nearly 94% of the shooting incidents 
                  occurred in public schools. However, we must consider the fact that there are more 
                  public schools than private schools. The bar chart on the right shows that over 60% 
-                 of the incidents happened in high schools, followed by elementary schools with 14.5%. 
+                 of the incidents happened in high schools, followed by elementary schools with 14.2%. 
                  Nevertheless, local governments and schools should take more effective actions to 
                  reduce the risk of school shootings.", 
                  style = "color: #808080;font-size:15px;"),
+              hr(),
+              fluidRow(
+                column(12, highchartOutput("shooting_time"))
+              ),
               hr(),
               h5('Data Source: ', 
                  a("The Washington Post", 

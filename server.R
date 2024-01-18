@@ -125,7 +125,7 @@ server <- shinyServer(function(input, output) {
       hc_title(text = "School Shooter Age Distribution") %>%
       hc_subtitle(text = 'Source: <a href="https://github.com/washingtonpost/data-
                   school-shootings" target="_blank">The Washington Post</a><br/>
-                  Omitted 86 shooters with unspecified age') %>%
+                  Omitted 114 shooters with unspecified age') %>%
       # Define hover tooltips
       hc_tooltip(pointFormat = 'Number of shooters: <b>{point.n}</b>
                  <br/>Accounted for <b>{point.freq}%</b> of all known age shooters') %>%
@@ -151,7 +151,7 @@ server <- shinyServer(function(input, output) {
              allowPointSelect = TRUE) %>%
       hc_title(text = "Source of Weapon for Age 10-19 Shooters") %>%
       hc_subtitle(text = 'Source: <a href="https://github.com/washingtonpost/data-school-shootings" target="_blank">The Washington Post</a><br/>
-                Omitted 127 records with unspecified weapon source') %>% 
+                Omitted 282 records with unspecified weapon source') %>% 
       hc_tooltip(pointFormat = 'Weapon Source: <b>{point.source_of_weapon}</b><br/>
                Accounted for <b>{point.y}%</b> of all specified weapon source') %>%
       hc_exporting(enabled = TRUE) %>%
@@ -246,5 +246,28 @@ server <- shinyServer(function(input, output) {
       # Define hover tooltips
       hc_tooltip(pointFormat = 'Number of Incidents Recorded: <b>{point.n}</b>
                  <br/>Accounted for <b>{point.freq}%</b> of all incidents')
+  })
+  
+  output$shooting_time <- renderHighchart({
+    all_hours <- data.frame(shooting_hour = 0:23)
+    
+    hourly_counts <- dataset %>%
+      group_by(shooting_hour) %>%
+      summarise(count = n(), .groups = 'drop')
+    
+    complete_hourly_counts <- all_hours %>%
+      left_join(hourly_counts, by = "shooting_hour") %>%
+      # Replace NA with 0 for hours without any shootings
+      replace_na(list(count = 0))
+
+    hchart(complete_hourly_counts, "column", hcaes(x = shooting_hour, y = count)) %>%
+      hc_title(text = "Shooting Counts by Hour") %>%
+      hc_subtitle(text = 'Source: <a href="https://github.com/washingtonpost/data-
+                  school-shootings" target="_blank">The Washington Post</a>') %>%
+      hc_plotOptions(series = list(borderRadius = 4, color = "#FF0000")) %>%
+      hc_xAxis(title = list(text = "Hour of the Day"), categories = as.character(all_hours$shooting_hour)) %>%
+      hc_yAxis(title = list(text = "Number of Incidents")) %>%
+      hc_plotOptions(column = list(dataLabels = list(enabled = TRUE))) %>%
+      hc_tooltip(pointFormat = 'Number of Incidents Recorded: <b>{point.count}</b>')
   })
 })
