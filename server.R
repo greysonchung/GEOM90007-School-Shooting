@@ -80,7 +80,7 @@ server <- shinyServer(function(input, output) {
     # Plot line and column bar chart
     highchart() %>%
       hc_exporting(enabled = TRUE) %>%
-      hc_title(text = "Number of Victims and Incidents Between 1999 and 2022") %>%
+      hc_title(text = "Number of Victims and Incidents Between 1999 and 2023") %>%
       hc_subtitle(text = 'Source: <a href="https://github.com/washingtonpost/data-
                   school-shootings" target="_blank">The Washington Post</a>') %>%
       hc_chart(zoomType = "x") %>%
@@ -237,10 +237,17 @@ server <- shinyServer(function(input, output) {
       arrange(desc(n)) %>%
       hchart("bar", hcaes(x = type_of_school, y = n)) %>%
       hc_exporting(enabled = TRUE) %>%
-      hc_plotOptions(series = list(borderRadius = 4, color = "#FF0000")) %>%
+      hc_plotOptions(series = list(
+        borderRadius = 4,
+        color = "#FF0000",
+        dataLabels = list(
+          enabled = TRUE,
+          color = "#000000",
+          formatter = JS("function() { return this.y }")
+        )
+      )) %>%
       hc_title(text = "Type of School Involved in Shooting Incidents") %>%
-      hc_subtitle(text = 'Source: <a href="https://github.com/washingtonpost/data-
-                  school-shootings" target="_blank">The Washington Post</a>') %>%
+      hc_subtitle(text = 'Source: <a href="https://github.com/washingtonpost/data-school-shootings" target="_blank">The Washington Post</a>') %>%
       hc_xAxis(title = list(text = "School Type")) %>%
       hc_yAxis(title = list(text = "Number of Incidents")) %>%
       # Define hover tooltips
@@ -264,10 +271,36 @@ server <- shinyServer(function(input, output) {
       hc_title(text = "Shooting Counts by Hour") %>%
       hc_subtitle(text = 'Source: <a href="https://github.com/washingtonpost/data-
                   school-shootings" target="_blank">The Washington Post</a>') %>%
+      hc_exporting(enabled = TRUE) %>%
       hc_plotOptions(series = list(borderRadius = 4, color = "#FF0000")) %>%
       hc_xAxis(title = list(text = "Hour of the Day"), categories = as.character(all_hours$shooting_hour)) %>%
       hc_yAxis(title = list(text = "Number of Incidents")) %>%
       hc_plotOptions(column = list(dataLabels = list(enabled = TRUE))) %>%
       hc_tooltip(pointFormat = 'Number of Incidents Recorded: <b>{point.count}</b>')
+  })
+  
+  output$enrolment_incidents <- renderHighchart({
+    bin_width <- 500  # Adjust this value based on the distribution of enrollment numbers in your data
+    bins <- seq(0, max(dataset$enrollment, na.rm = TRUE) + bin_width, by = bin_width)
+    dataset$enrollment_bin <- cut(dataset$enrollment, breaks = bins, include.lowest = TRUE, labels = FALSE)
+
+    incident_counts <- dataset %>%
+      filter(!is.na(enrollment_bin)) %>%  # Remove rows where enrollment_bin is NA
+      group_by(enrollment_bin) %>%
+      summarise(incidents = n(), .groups = 'drop') %>%
+      mutate(
+        midpoint = (enrollment_bin - 1) * bin_width + bin_width / 2
+      )
+    
+    highchart() %>%
+      hc_chart(type = "scatter", zoomType = "xy") %>%
+      hc_title(text = "Enrollment vs. Number of Incidents") %>%
+      hc_subtitle(text = "Scatter plot showing if larger schools tend to have more incidents") %>%
+      hc_xAxis(title = list(text = "Enrollment Size of School")) %>%
+      hc_yAxis(title = list(text = "Number of Incidents")) %>%
+      hc_tooltip(headerFormat = "<b>{series.name}</b><br>", pointFormat = "Enrollment Size: <b>{point.x}</b><br>Incidents: <b>{point.y}</b>") %>%
+      hc_add_series(data = incident_counts %>% mutate(x = midpoint, y = incidents) %>% select(x, y) %>% list_parse(), name = "Incidents", 
+                    color = "#FF0000", marker = list(radius = 5)) %>%
+      hc_exporting(enabled = TRUE)  # Enable exporting the chart
   })
 })

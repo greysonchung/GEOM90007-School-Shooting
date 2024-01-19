@@ -9,7 +9,7 @@ library(bslib)
 source('helper.R')
 
 ui <- page_navbar(
-  title = "Post-Columbine: US School Shootings",
+  title = "Post-Columbine",
   nav_spacer(),
   nav_panel("Home",
             fluidPage(
@@ -72,7 +72,7 @@ ui <- page_navbar(
                               min = 1999, max = 2023, value = c(1999, 2023), sep = "")
                 ),
                 mainPanel(
-                  highchartOutput("school_map", height = 580)
+                  highchartOutput("school_map", height = "100%")
                 )
               ),
               hr(),
@@ -123,7 +123,7 @@ ui <- page_navbar(
                 column(6, highchartOutput("weapon_source"))
               ),
               hr(),
-              h4("As depicted in the plot on the left, over 55% of shooters with a known age fall 
+              h4("As depicted in the plot on the left, 58% of shooters with a known age fall 
                  between 15 and 19 years old, followed by those aged 10 to 14, who constitute almost
                  20%. The plot on the right indicates that for those aged between 10 and 19, over 
                  70% obtained their weapons from relatives. Thus, adults should be more vigilant and 
@@ -165,7 +165,8 @@ ui <- page_navbar(
                  style = "color: #808080;font-size:15px;"),
               hr(),
               fluidRow(
-                column(12, highchartOutput("shooting_time"))
+                column(6, highchartOutput("shooting_time")),
+                column(6, highchartOutput("enrolment_incidents"))
               ),
               hr(),
               h5('Data Source: ', 
