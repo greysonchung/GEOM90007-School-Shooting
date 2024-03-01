@@ -122,6 +122,12 @@ server <- shinyServer(function(input, output) {
              showInLegend = TRUE, center = list("50%", "70%"), size = "100%",
              startAngle = -100, endAngle  = 100) %>%
       hc_exporting(enabled = TRUE) %>%
+      hc_plotOptions(item = list(
+        dataLabels = list(
+          enabled = TRUE,
+          format = '{point.name} ({point.freq:.1f} %)')
+        )
+      ) %>%
       hc_title(text = "School Shooter Age Distribution") %>%
       hc_subtitle(text = 'Source: <a href="https://github.com/washingtonpost/data-
                   school-shootings" target="_blank">The Washington Post</a><br/>
@@ -146,8 +152,7 @@ server <- shinyServer(function(input, output) {
       
       # Render the chart
       hchart("pie", innerSize = '60%', hcaes(x = source_of_weapon, y = freq*100),
-             showInLegend = TRUE, 
-             dataLabels = list(enabled = TRUE),
+             showInLegend = TRUE,
              allowPointSelect = TRUE) %>%
       hc_title(text = "Source of Weapon for Age 10-19 Shooters") %>%
       hc_subtitle(text = 'Source: <a href="https://github.com/washingtonpost/data-school-shootings" target="_blank">The Washington Post</a><br/>
@@ -155,6 +160,12 @@ server <- shinyServer(function(input, output) {
       hc_tooltip(pointFormat = 'Weapon Source: <b>{point.source_of_weapon}</b><br/>
                Accounted for <b>{point.y}%</b> of all specified weapon source') %>%
       hc_exporting(enabled = TRUE) %>%
+      hc_plotOptions(pie = list(
+        dataLabels = list(
+          enabled = TRUE,
+          format = '{point.source_of_weapon} ({point.y:.1f} %)')
+        )
+      ) %>%
       hc_legend(labelFormat = '{name} <span style="opacity: 0.5">{n}</span>')
   })
 
@@ -212,9 +223,15 @@ server <- shinyServer(function(input, output) {
       mutate(freq = round(n/sum(n), 3)) %>%
       
       # Plotting
-      hchart("pie", innerSize = '60%', hcaes(x = school_type, y = freq*100), showInLegend = TRUE, 
-             dataLabels = list(enabled = FALSE), allowPointSelect = TRUE) %>%
+      hchart("pie", innerSize = '60%', hcaes(x = school_type, y = freq * 100), 
+             showInLegend = TRUE, allowPointSelect = TRUE) %>%
       hc_exporting(enabled = TRUE) %>%
+      hc_plotOptions(pie = list(
+        dataLabels = list(
+          enabled = TRUE,
+          format = '{point.school_type} ({point.y:.1f} %)')
+        )
+      ) %>%
       
       # Define hue for the two groups
       hc_colors(c('#0000FF', '#FF0000')) %>%

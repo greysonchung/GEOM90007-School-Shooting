@@ -10,6 +10,10 @@ source('helper.R')
 
 ui <- page_navbar(
   title = "Post-Columbine",
+  theme = bs_theme(
+    bootswatch = "cerulean",
+    navbar_bg = "#d3d3d3"
+  ),
   nav_spacer(),
   nav_panel("Home",
             fluidPage(
