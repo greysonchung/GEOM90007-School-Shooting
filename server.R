@@ -11,6 +11,8 @@ library(highcharter)
 library(dplyr)
 library(tidyr)
 library(dashboardthemes)
+thematic::thematic_shiny(font = "auto")
+shiny::bootstrapLib()
 source('helper.R')
 
 # Set a global theme highcharter plot

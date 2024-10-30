@@ -6,6 +6,7 @@ library(shinyWidgets)
 library(igraph)
 library(highcharter)
 library(bslib)
+thematic::thematic_shiny(font = "auto")
 source('helper.R')
 
 ui <- page_navbar(
@@ -73,7 +74,7 @@ ui <- page_navbar(
                   sliderInput("map_filter", 
                               tags$p(fa("filter", fill = "forestgreen"),
                                      "Select a time period for visualisation"),
-                              min = 1999, max = 2023, value = c(1999, 2023), sep = "")
+                              min = 1999, max = 2024, value = c(1999, 2024), sep = "")
                 ),
                 mainPanel(
                   highchartOutput("school_map", height = "100%")
